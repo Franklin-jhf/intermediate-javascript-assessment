@@ -13,6 +13,15 @@
 // return the result of your updateAnimal invocation
 
 // CODE HERE...
+function callBinding(arr, func, idNum) {
+	var animal = '';
+	arr.forEach(function(x) {
+		if (x.id === idNum) {
+			animal = x;
+		}
+	});
+	return func.call(animal, 'Trogdor');
+}
 
 
 
@@ -29,7 +38,15 @@
 
 // CODE HERE...
 
-
+function applyBinding(arr, func, num) {
+	var animal = '';
+	arr.forEach(function(x) {
+		if (x.id === num) {
+			animal = x;
+		}
+	});
+	return func.apply(animal, ['being majestic', 'eating rainbows']);
+}
 
 // *************
 // * PROBLEM 3 *
@@ -49,7 +66,16 @@ var foo;
 
 // CODE HERE...
 
-
+function promiseMe(obj) {
+	var deferObj = obj.defer();
+	setTimeout(function() {
+		deferObj.resolve(function(){
+			foo = 'bar';
+			return foo;
+		});
+	}, 20);
+	return deferObj.promise.then(results => results());
+}
 
 // *************
 // * PROBLEM 4 *
@@ -64,3 +90,28 @@ var foo;
 // and then resolve the array as you complete your promise.
 
 // CODE HERE...
+
+function emailList(obj, req) {
+	var deferObj = obj.defer();
+	let arr = [];
+
+	req.get('/api/users').then(function(res){
+		let data = res.data;
+		for (var i in data) {
+			arr.push(data[i].email);
+		}
+	});
+
+	deferObj.resolve(function() {
+		return arr;
+	})
+
+	return deferObj.promise.then(function(res){return res()});
+}
+
+
+
+
+
+
+
